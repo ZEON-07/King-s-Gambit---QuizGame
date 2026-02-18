@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="quiz.css">
+    <title>Quiz Finale</title>
+</head>
+<body>
+    <div class="controlCenter">
+        <div class="qPreview">
+            <h3 id="qpq">Capitale De Francas</h3>
+            <h3 id="qpa">Paris</h3>
+        </div>
+        <div class="qControl">
+            <button id="qPrev" onclick="toggle(buttonStatus[this.id],'control')"><<</button>
+            <button id="qNext" onclick="toggle(buttonStatus[this.id],'control')">>></button>
+        </div>
+        <div class="controlSwitch">
+            <div class="switch inactive" id="Q" onclick="toggle(buttonStatus[this.id],'control')">
+                <div class="switchStatus">
+                </div>
+                Q
+            </div>
+            <div class="switch inactive" id="A" onclick="toggle(buttonStatus[this.id],'control')">
+                <div class="switchStatus">
+                </div>
+                A
+            </div>
+            <div class="switch inactive" id="M" onclick="toggle(buttonStatus[this.id],'control')">
+                <div class="switchStatus">
+                </div>
+                M
+            </div>
+            <div class="switch inactive" id="SC" onclick="toggle(buttonStatus[this.id],'control')">
+                <div class="switchStatus">
+                </div>
+                SC
+            </div>
+            <div class="switch inactive" id="SET" onclick="toggle(buttonStatus[this.id],'control')">
+                <div class="switchStatus">
+                </div>
+                SET
+            </div>
+            <div class="switch inactive" id="UPD" onclick="toggle(buttonStatus[this.id],'control')">
+                <div class="switchStatus">
+                </div>
+                UPD
+            </div>
+            <div class="switch inactive"  id="ANS" onclick="toggle(buttonStatus[this.id],'control')">
+                <div class="switchStatus">
+                </div>
+                ANS
+            </div>
+            <div class="switch inactive" id="RE" onclick="toggle(buttonStatus[this.id],'control')">
+                <div class="switchStatus">
+                </div>
+                RE
+            </div>
+            <div class="switch inactive disabled" id="DEL">
+                <div class="switchStatus">
+                </div>
+                DEL
+            </div>
+        </div>
+
+        <div class="questionLoader">
+            <input type="file" id="qFile" accept=".json" style="display: none;">
+            <button id="qLoad" onclick="elem('qFile').click()">Load Questions</button>
+            <div>
+                <div id="qstatus"></div>
+            </div>
+        </div>
+
+        <div class="markSettings">
+                
+        </div>
+        <div class="scoreChart">
+            <div class="scoreCard"><input type="text" id="p1Name" placeholder="Player 1"><input type="number" id="p1Score" placeholder="0"></div>
+            <div class="scoreCard"><input type="text" id="p2Name" placeholder="Player 2"><input type="number" id="p2Score" placeholder="0"></div>
+            <div class="scoreCard"><input type="text" id="p3Name" placeholder="Player 3"><input type="number" id="p3Score" placeholder="0"></div>
+            <div class="scoreCard"><input type="text" id="p4Name" placeholder="Player 4"><input type="number" id="p4Score" placeholder="0"></div>
+            <div class="scoreCard"><input type="text" id="p5Name" placeholder="Player 5"><input type="number" id="p5Score" placeholder="0"></div>
+            <div class="scoreCard"><input type="text" id="p6Name" placeholder="Player 6"><input type="number" id="p6Score" placeholder="0"></div>
+        </div>
+    </div>
+
+    <script src="quizServer.js"></script>
+
+</body>
+</html>
