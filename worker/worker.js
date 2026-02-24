@@ -19,7 +19,6 @@ export default {
       // Helper for path matching
       const is = (p) => path === p || path === p + "/";
 
-      // --- ADMIN SECURITY CHECK ---
       if (path.includes("/admin/")) {
         // 1. IP Protection
         const clientIP = request.headers.get("CF-Connecting-IP");
@@ -39,9 +38,6 @@ export default {
           }
         }
       }
-
-      // --- PUBLIC ROUTES ---
-
       if (is("/api/settings") && method === "GET") {
         const { results } = await env.DB.prepare("SELECT key, value FROM settings").all();
         const settings = {};
@@ -100,9 +96,6 @@ export default {
         await env.DB.prepare("INSERT INTO violations (team_id) VALUES (?)").bind(team_id).run();
         return new Response(JSON.stringify({ success: true }), { headers: corsHeaders });
       }
-
-      // --- ADMIN ROUTES ---
-
       // ADMIN LOGIN
       if (is("/api/admin/login") && method === "POST") {
         const { password } = await request.json();
@@ -219,7 +212,6 @@ export default {
         return new Response(JSON.stringify({ success: true }), { headers: corsHeaders });
       }
 
-      // 404
       return new Response(JSON.stringify({
         error: "Not Found",
         path: path,

@@ -1,5 +1,3 @@
-/* ─── Base Styles */
-
 body {
     min-height: 100vh;
     display: flex;
@@ -10,8 +8,6 @@ body {
     box-sizing: border-box;
     background: #000;
 }
-
-/* ─── Header*/
 
 .lb-header {
     text-align: center;
@@ -32,8 +28,6 @@ body {
     margin: 0;
     font-weight: 600;
 }
-
-/* ─── Status Indicator*/
 
 #lbStatus {
     display: flex;
@@ -82,8 +76,6 @@ body {
         transform: scale(1);
     }
 }
-
-/* ─── Table & Rows ──────────────────────────────────────────────────────────── */
 
 #lbContent {
     width: 100%;
@@ -168,8 +160,6 @@ body {
     text-transform: uppercase;
 }
 
-/* ─── Controls ─────────────────────────────────────────────────────────────── */
-
 .refresh-btn {
     margin-top: 40px;
     padding: 12px 30px;
@@ -193,8 +183,6 @@ body {
     color: #00c3ff;
     transform: translateY(-2px);
 }
-
-/* ─── States ────────────────────────────────────────────────────────────────── */
 
 .lb-locked {
     display: flex;

@@ -1,5 +1,3 @@
-/* ─── Layout ────────────────────────────────────────────────────────────────── */
-
 .controlCenter {
     position: absolute;
     width: 98vw;
@@ -26,8 +24,6 @@
     overflow: hidden;
     position: relative;
 }
-
-/* ─── Main Control Sections ─────────────────────────────────────────────────── */
 
 .qPreview {
     grid-row: 1;
@@ -80,8 +76,6 @@
     gap: 12px;
     padding: 15px;
 }
-
-/* ─── Control Buttons ───────────────────────────────────────────────────────── */
 
 .ctrlBtn {
     flex: 1;
@@ -145,8 +139,6 @@
     border-color: rgba(168, 85, 247, 0.4);
     color: #a855f7;
 }
-
-/* ─── Bottom Actions ────────────────────────────────────────────────────────── */
 
 #settingsBar {
     position: absolute !important;
@@ -456,7 +448,7 @@
     }
 }
 
-/* ─── Team Management ───────────────────────────────────────────────────────── */
+
 
 .controlCenter .scoreChart {
     grid-row: 2;
@@ -650,7 +642,7 @@
     color: white;
 }
 
-/* ─── Question Loader ───────────────────────────────────────────────────────── */
+
 
 .questionLoader {
     grid-row: 2;
@@ -721,7 +713,7 @@
     transition: width 0.4s ease;
 }
 
-/* ─── Rich Preview ──────────────────────────────────────────────────────────── */
+
 
 .localPreviewQ {
     font-size: 0.9rem;

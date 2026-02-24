@@ -1,13 +1,9 @@
 const channel = new BroadcastChannel('quizChannel');
 const ping = new BroadcastChannel('ping');
 
-// ─── Utilities ──────────────────────────────────────────────────────────────
-
 function elem(id) {
     return document.getElementById(id);
 }
-
-// ─── Admin Gate ──────────────────────────────────────────────────────────────
 
 async function checkAdminPass() {
     const input = document.getElementById('adminPassInput');
@@ -27,9 +23,9 @@ async function checkAdminPass() {
 
         const data = await res.json();
         if (res.ok && data.token) {
-            // Encode token in Base64 for obfuscation as requested
+
             localStorage.setItem('admin_token', btoa(data.token));
-            localStorage.removeItem('admin_password'); // Remove old password storage
+            localStorage.removeItem('admin_password');
             const gate = document.getElementById('adminGate');
             if (gate) gate.style.display = 'none';
             if (typeof startup === 'function') startup();
@@ -50,9 +46,6 @@ window.addEventListener('DOMContentLoaded', () => {
         qFileInput.addEventListener('change', handleJSONUpload);
     }
 });
-
-// ─── Global State ────────────────────────────────────────────────────────────
-
 const WORKER_URL = 'https://kings-gambit-worker.mr-adhi125.workers.dev';
 const API = WORKER_URL || '';
 
@@ -68,9 +61,6 @@ var serverStatus = {
     connected: false,
     isOn: true
 }
-
-// ─── Control Buttons ─────────────────────────────────────────────────────────
-
 var buttonStatus = {
     M: {
         active: true,
@@ -107,7 +97,7 @@ var buttonStatus = {
                 delete broadcastData.answer;
                 sendMessage({ control: "setQuestion", data: broadcastData });
 
-                // Auto-start Timer Logic
+
                 const autoStart = document.getElementById("timerAutoStart")?.value || "options";
                 if (autoStart === "question") {
                     const duration = parseInt(document.getElementById("timerDuration")?.value) || 30;
@@ -232,9 +222,6 @@ var buttonStatus = {
         }
     }
 }
-
-// ─── Button Utilities ────────────────────────────────────────────────────────
-
 async function pressOnce(buttonObj) {
     buttonObj.elem.classList.add("active");
     buttonObj.elem.classList.remove("inactive");
@@ -306,9 +293,6 @@ async function warnOn(buttonObj) {
     buttonObj.active = false;
     toggle(buttonObj);
 }
-
-// ─── Core Utilities ──────────────────────────────────────────────────────────
-
 function setloaderProgress(per, color = "#00c3ff") {
     const el = elem("qstatus");
     if (el) {
@@ -330,9 +314,6 @@ function getAdminToken() {
         return "";
     }
 }
-
-// ─── API Handlers ────────────────────────────────────────────────────────────
-
 async function loadQuiz() {
     if (!API) return;
     try {
@@ -387,7 +368,7 @@ async function handleJSONUpload(event) {
     const file = event.target.files[0];
     if (!file) return;
 
-    setloaderProgress(10, "#a855f7"); // UI feedback start
+    setloaderProgress(10, "#a855f7");
 
     const reader = new FileReader();
     reader.onload = async (e) => {
@@ -397,7 +378,7 @@ async function handleJSONUpload(event) {
                 throw new Error("JSON must be an array of questions.");
             }
 
-            // Robust Mapping to Worker Schema
+
             const questions = rawQuestions.map(q => ({
                 question_text: q.question_text || q.question || q.q || "",
                 option_a: q.option_a || (Array.isArray(q.options) ? q.options[0] : "") || "",
@@ -419,15 +400,15 @@ async function handleJSONUpload(event) {
             });
 
             if (res.ok) {
-                setloaderProgress(100, "#22c55e"); // Success green
-                await loadQuiz(); // Refresh the list
+                setloaderProgress(100, "#22c55e");
+                await loadQuiz();
                 setTimeout(() => setloaderProgress(0), 3000);
                 customAlert("Questions uploaded successfully!");
             } else {
                 const data = await res.json().catch(() => ({}));
                 console.error("Upload failed details:", { status: res.status, data });
                 customAlert(`Upload failed (${res.status}): ` + (data.error || "Unknown error"));
-                setloaderProgress(100, "#f44"); // Error red
+                setloaderProgress(100, "#f44");
                 setTimeout(() => setloaderProgress(0), 5000);
             }
         } catch (err) {
@@ -442,7 +423,7 @@ async function handleJSONUpload(event) {
         setloaderProgress(0);
     };
     reader.readAsText(file);
-    event.target.value = ""; // Reset for next selection
+    event.target.value = "";
 }
 
 async function loadTeams() {
@@ -543,9 +524,6 @@ async function saveSettings() {
         customAlert("Network error saving settings");
     }
 }
-
-// ─── Question & Preview Logic ────────────────────────────────────────────────
-
 function getCurrentQuestion() {
     if (!quiz || quiz.length === 0) return null;
     const item = quiz[qi];
@@ -555,7 +533,7 @@ function getCurrentQuestion() {
     const overrideEl = document.getElementById("qPointsOverride");
     const pts = overrideEl ? (parseInt(overrideEl.value) || globalPoints) : (item.points || globalPoints);
 
-    // Resilience: support both DB field names and legacy names
+
     const questionText = item.q || item.question || item.question_text || "";
     const options = item.options || [item.option_a, item.option_b, item.option_c, item.option_d].filter(o => o !== undefined);
     const answer = typeof item.answer === "number" ? item.answer : (typeof item.correct_answer === "number" ? item.correct_answer : -1);
@@ -641,9 +619,6 @@ function applyPointsToAll() {
     updatePreview();
     customAlert(`Applied ${pts} points to all ${quiz.length} questions.`);
 }
-
-// ─── Messaging ───────────────────────────────────────────────────────────────
-
 function sendMessage(msg) {
     channel.postMessage(msg);
 }
@@ -726,9 +701,6 @@ channel.onmessage = function (event) {
         sendMessage({ control: "refreshScore", data: teams });
     }
 };
-
-// ─── Timer Logic ─────────────────────────────────────────────────────────────
-
 function resetTimer() {
     sendMessage({ control: "resetTimer" });
 }
@@ -753,9 +725,6 @@ function resumeTimer() {
     syncCtrlBtn("PAUSE", false);
     if (btn) btn.innerHTML = '<i class="fa-solid fa-pause"></i><br>PAUSE';
 }
-
-// ─── Control Pad Reset ───────────────────────────────────────────────────────
-
 function resetControlPad() {
     currentSelections = {};
     const targetBtns = ["Q", "SC", "ANS", "PAUSE"];
@@ -797,18 +766,12 @@ function ctrlAction(id) {
         toggle(buttonStatus[id], "control");
     }
 }
-
-// ─── Component Interactions ──────────────────────────────────────────────────
-
 function toggleSettingsPanel() {
     const settingsBar = document.getElementById('settingsBar');
     if (settingsBar) {
         settingsBar.classList.toggle('collapsed');
     }
 }
-
-// ─── Startup Logic ───────────────────────────────────────────────────────────
-
 async function buttonSequence() {
     var buttons = document.getElementsByClassName("switch");
     await sleep(200);
@@ -832,9 +795,6 @@ async function buttonSequence() {
     }
     setloaderProgress(0);
 }
-
-
-
 window.onload = async function () {
     setloaderProgress(25);
     sentPing({ request: "App", action: "query", query: "isOn", from: "server" });
@@ -890,9 +850,6 @@ ping.onmessage = async (event) => {
         }
     }
 };
-
-// ─── Team Management ─────────────────────────────────────────────────────────
-
 async function createNewTeam() {
     const nameInput = document.getElementById("newTeamName");
     const name = nameInput ? nameInput.value.trim() : prompt("Enter Team Name:");
@@ -1117,9 +1074,6 @@ async function clearAllTeams() {
         }
     } catch (e) { console.error(e); }
 }
-
-// ─── Modals & Helpers ────────────────────────────────────────────────────────
-
 function showTeamModal() {
     const m = document.getElementById("teamModal");
     if (m) m.style.display = "flex";
@@ -1163,9 +1117,6 @@ function syncCtrlBtn(id, active) {
     if (active) el.classList.add('active');
     else el.classList.remove('active');
 }
-
-// ─── Announcements ───────────────────────────────────────────────────────────
-
 function showAnnModal() {
     const modal = document.getElementById('annModal');
     if (modal) modal.style.display = 'flex';
@@ -1186,9 +1137,6 @@ function clearAnnouncement() {
     const textEl = document.getElementById('annText');
     if (textEl) textEl.value = '';
 }
-
-// ─── Violations ──────────────────────────────────────────────────────────────
-
 async function showViolationsModal() {
     const modal = elem("violationsModal");
     if (modal) modal.style.display = "flex";
@@ -1238,7 +1186,7 @@ async function loadViolations() {
         list.innerHTML = `<p style="text-align: center; color: #f44; padding: 20px;">Error connecting to server. Check console for details.</p>`;
     }
 }
-// ─── Violations Polling ──────────────────────────────────────────────────────
+
 let lastViolationTimestamp = Date.now();
 let violationPollInterval = null;
 
@@ -1269,7 +1217,7 @@ async function startup() {
 
 function startViolationPolling() {
     if (violationPollInterval) clearInterval(violationPollInterval);
-    // Sync initial timestamp to avoid alerting on historical data
+
     lastViolationTimestamp = Date.now();
     violationPollInterval = setInterval(checkForNewViolations, 5000);
 }
@@ -1287,14 +1235,14 @@ async function checkForNewViolations() {
             if (violations.length > 0) {
                 // Check if the most recent violation is newer than our last seen
                 const latest = violations[0];
-                // SQLite's CURRENT_TIMESTAMP is UTC but lacks the 'Z' suffix
-                // e.g., "2024-02-23 15:30:00". Javascript without 'Z' assumes it's LOCAL time!
+
+
                 const latestTime = new Date(latest.timestamp + 'Z').getTime();
 
                 if (latestTime > lastViolationTimestamp) {
                     showViolationAlert(latest.name || latest.team_name || 'Team');
                     lastViolationTimestamp = latestTime;
-                    // Auto-open modal as requested
+
                     showViolationsModal();
                 }
             }
@@ -1314,13 +1262,13 @@ function showViolationAlert(teamName) {
     toast.classList.add("show");
     if (vBtn) vBtn.classList.add("alerting");
 
-    // Click toast to focus modal
+
     toast.onclick = () => {
         showViolationsModal();
         toast.classList.remove("show");
     };
 
-    // Audio cue
+
     try {
         const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/951/951-preview.mp3');
         audio.volume = 0.4;

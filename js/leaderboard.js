@@ -1,5 +1,3 @@
-// ─── Global State ────────────────────────────────────────────────────────────
-
 const WORKER_URL = 'https://kings-gambit-worker.mr-adhi125.workers.dev';
 const API = WORKER_URL || '';
 
@@ -11,9 +9,6 @@ const MEDALS = [
 
 let pollTimer = null;
 let isFetching = false;
-
-// ─── Core Logic ──────────────────────────────────────────────────────────────
-
 async function fetchLeaderboard() {
     if (isFetching) return;
     isFetching = true;
@@ -110,15 +105,9 @@ function resetPolling() {
     if (pollTimer) clearInterval(pollTimer);
     pollTimer = setInterval(fetchLeaderboard, 5000);
 }
-
-// ─── Utilities ───────────────────────────────────────────────────────────────
-
 function escapeHTML(str) {
     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
-
-// ─── Startup ─────────────────────────────────────────────────────────────────
-
 window.onload = () => {
     fetchLeaderboard();
     resetPolling();

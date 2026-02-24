@@ -1,9 +1,4 @@
-// ─── Global State ────────────────────────────────────────────────────────────
-
 const API = 'https://kings-gambit-worker.mr-adhi125.workers.dev';
-
-// ─── Login Logic ─────────────────────────────────────────────────────────────
-
 async function attemptLogin() {
     const passkey = document.getElementById('teamPass').value.trim().toUpperCase();
     const statusEl = document.getElementById('loginStatus');
@@ -51,8 +46,6 @@ async function attemptLogin() {
         btn.innerHTML = '<i class="fa-solid fa-chess-king"></i> Enter the Arena';
     }
 }
-
-// ─── Startup ─────────────────────────────────────────────────────────────────
 
 window.onload = () => {
     const input = document.getElementById('teamPass');

@@ -1,5 +1,3 @@
-// ─── Global State ────────────────────────────────────────────────────────────
-
 const WORKER_URL = 'https://kings-gambit-worker.mr-adhi125.workers.dev';
 const API = WORKER_URL || '';
 
@@ -18,12 +16,6 @@ var connectApp = {
   isRunningSequence: false,
 };
 
-// ─── Visibility Detection ────────────────────────────────────────────────────
-
-// ─── Violation Queue System ────────────────────────────────────────────────────
-// Browsers notoriously kill fetch requests made exactly as a tab unloads or blurs.
-// We queue them in localStorage and sync them constantly in the background.
-
 function pushViolationToQueue() {
   const teamId = localStorage.getItem("team_id");
   if (!teamId) return;
@@ -34,7 +26,6 @@ function pushViolationToQueue() {
     if (stored) q = JSON.parse(stored);
   } catch (e) { }
 
-  // Debounce: don't log a new violation if one was logged within the last 3000ms
   const now = Date.now();
   if (q.length > 0) {
     const last = q[q.length - 1];
@@ -55,7 +46,7 @@ async function syncViolations() {
 
   if (q.length === 0) return;
 
-  // Take the first violation (process one at a time for safety)
+
   const v = q[0];
 
   try {
@@ -67,17 +58,15 @@ async function syncViolations() {
     });
 
     if (res.ok) {
-      // Successfully sent to DB! Remove it from queue.
+
       q.shift();
       localStorage.setItem("violation_queue", JSON.stringify(q));
     }
   } catch (e) {
-    // Keep in queue for next sync cycle
+
     console.warn("Delaying violation sync:", e);
   }
 }
-
-// Check every 2 seconds if we owe the server a violation report
 setInterval(syncViolations, 2000);
 
 document.addEventListener("visibilitychange", () => {
@@ -90,7 +79,7 @@ window.addEventListener("blur", () => {
   pushViolationToQueue();
 });
 
-// ─── Startup ─────────────────────────────────────────────────────────────────
+
 
 window.onload = async function () {
   const teamId = localStorage.getItem("team_id");
@@ -123,9 +112,6 @@ window.onload = async function () {
 window.onbeforeunload = function () {
   return "Refreshing the page will cause issues. Are you sure you want to leave?";
 };
-
-// ─── API Handlers ────────────────────────────────────────────────────────────
-
 async function loadQuestions() {
   if (!API) return;
   try {
@@ -137,9 +123,6 @@ async function loadQuestions() {
     console.warn("Error loading questions:", e);
   }
 }
-
-// ─── Communications ──────────────────────────────────────────────────────────
-
 ping.onmessage = async (event) => {
   var msg = event.data;
   if (msg.OVERRIDE != true) {
@@ -181,9 +164,6 @@ ping.onmessage = async (event) => {
 function sendMessage(msg) {
   channel.postMessage(msg);
 }
-
-// ─── Core Handlers ───────────────────────────────────────────────────────────
-
 channel.onmessage = async (event) => {
   var msg = event.data;
 
@@ -266,7 +246,7 @@ channel.onmessage = async (event) => {
     const answerText = msg.data?.answerText || "";
     const grid = document.getElementById("optionsGrid");
 
-    // Determine if options have been shown yet
+
     if (grid && grid.classList.contains("visible")) {
       const myChoice = window._myLockedChoice;
       for (let i = 0; i < 4; i++) {
@@ -291,14 +271,14 @@ channel.onmessage = async (event) => {
         window._feedbackTimeout = setTimeout(() => overlay.classList.remove("show"), 3000);
       }
     } else {
-      // Options skipped, just show the answer directly
+
       A("set", answerText || "No answer provided");
       A("show");
-      // Ensure Q continues to be visible if we skipped options
-      // But since standard behaviour is Q hides when A shows, keep original behaviour:
+
+
     }
 
-    // Always call show
+
     A("set", answerText);
     A("show");
   }
@@ -381,9 +361,6 @@ channel.onmessage = async (event) => {
   if (msg.control === "pauseTimer") pauseTimer();
   if (msg.control === "resumeTimer") resumeTimer();
 };
-
-// ─── Timer Logic ─────────────────────────────────────────────────────────────
-
 var _timerInterval = null;
 var _timerPaused = false;
 var _timerRemaining = 0;
@@ -443,9 +420,6 @@ function resumeTimer() {
     }
   }, 1000);
 }
-
-// ─── UI Handlers ─────────────────────────────────────────────────────────────
-
 async function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -488,8 +462,6 @@ function A(action, a) {
   }
   if (action == "set") asd.innerHTML = a;
 }
-
-// ─── MCQ Selection ───────────────────────────────────────────────────────────
 
 var _feedbackTimeout = null;
 var _myLockedChoice = null;
@@ -540,9 +512,6 @@ async function selectOption(index) {
     }
   }
 }
-
-// ─── Announcements ───────────────────────────────────────────────────────────
-
 function showAnnouncement(text) {
   const overlay = document.getElementById("annOverlay");
   const overlayText = document.getElementById("annOverlayText");
@@ -565,9 +534,6 @@ function hideAnnouncement() {
     }, 500);
   }
 }
-
-// ─── Leaderboard Overlay ─────────────────────────────────────────────────────
-
 async function showLeaderboardOverlay(enabled) {
   const overlay = document.getElementById("lbOverlay");
   const content = document.getElementById("lbOverlayContent");
@@ -614,9 +580,6 @@ async function showLeaderboardOverlay(enabled) {
     content.innerHTML = `<div style="text-align:center; padding:20px; color:#f44;"><i class="fa-solid fa-lock"></i><br>${e.message}</div>`;
   }
 }
-
-// ─── Rules Modal ─────────────────────────────────────────────────────────────
-
 function showRules() {
   const modal = document.getElementById("rulesModal");
   if (modal) modal.style.display = "flex";

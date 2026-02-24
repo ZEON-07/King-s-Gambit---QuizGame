@@ -19,9 +19,7 @@
   <!-- Floating Preview Button -->
   <a href="preview.html" target="_blank" class="previewBtn" id="floatPreview">
     <i class="fa-solid fa-eye"></i> Preview
-  </a>
-
-  <!-- Quiz Screen -->
+  </a> <!-- Quiz Screen -->
   <div id="quizContainer">
 
     <!-- HUD -->
@@ -39,15 +37,11 @@
         <span id="myTeamName"><i class="fa-solid fa-users"></i> Team</span>
         <span id="myTeamScore">0</span>
       </div>
-    </div>
-
-    <!-- Question & Answer -->
+    </div> <!-- Question & Answer -->
     <div class="quizDisplay">
       <h1 class="quizQ"></h1>
       <div class="quizDivider"></div>
-      <h2 class="quizA"></h2>
-
-      <!-- MCQ Options (shown by OP button) -->
+      <h2 class="quizA"></h2> <!-- MCQ Options (shown by OP button) -->
       <div class="optionsGrid" id="optionsGrid">
         <button class="optionBtn" id="opt0" onclick="selectOption(0)">
           <span class="optionLetter">A</span>
@@ -66,23 +60,17 @@
           <span class="optionText"></span>
         </button>
       </div>
-    </div>
-
-    <!-- Feedback Overlay -->
+    </div> <!-- Feedback Overlay -->
     <div id="feedbackOverlay">
       <div class="feedbackBadge" id="feedbackBadge"></div>
     </div>
 
-  </div>
-
-  <!-- Game Frozen Overlay -->
+  </div> <!-- Game Frozen Overlay -->
   <div id="freezeOverlay" style="display:none;">
     <i class="fa-solid fa-snowflake"></i>
     <h1>GAME PAUSED</h1>
     <p id="freezeMsg">The administrator has paused the game.</p>
-  </div>
-
-  <!-- Announcement Overlay -->
+  </div> <!-- Announcement Overlay -->
   <div id="annOverlay" class="announcement-overlay" style="display:none;">
     <div class="announcement-card">
       <div class="announcement-label">Announcement</div>
@@ -90,9 +78,7 @@
       <div id="annOverlayText" class="announcement-text"></div>
     </div>
   </div>
-  </div>
-
-  <!-- Leaderboard Global Overlay -->
+  </div> <!-- Leaderboard Global Overlay -->
   <div id="lbOverlay" class="announcement-overlay" style="display:none; flex-direction: column;">
     <div class="lb-header" style="margin-top: 40px; transform: scale(0.8);">
       <div class="logo"><i class="fa-solid fa-chess-pawn"></i></div>
@@ -101,10 +87,7 @@
     <div id="lbOverlayContent" style="width: 100%; max-width: 600px; padding: 20px; overflow-y: auto;">
       <!-- Populated by JS -->
     </div>
-  </div>
-
-
-  <!-- Rules Modal -->
+  </div> <!-- Rules Modal -->
   <div id="rulesModal" class="announcement-overlay" style="display:none; z-index: 10001;">
     <div class="announcement-card" style="max-width: 500px; text-align: left;">
       <div class="announcement-label">Quiz Rules & Protocol</div>
@@ -128,8 +111,6 @@
       </div>
     </div>
   </div>
-
-
   <footer class="site-footer">
     &copy; <span id="footerYear"></span> TRAIN 303. ALL RIGHTS RESERVED.
   </footer>

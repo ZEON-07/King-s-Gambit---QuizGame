@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
     const modalHTML = `
-    <!-- Custom Alert Modal -->
     <div id="customAlertModal" class="modal" style="display:none; z-index: 1000000;">
         <div class="modal-content" style="max-width: 400px; text-align: center;">
             <div class="modal-header" style="justify-content: center; background: rgba(0, 195, 255, 0.1); border-bottom: 1px solid rgba(0, 195, 255, 0.2);">
@@ -15,7 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
     </div>
 
-    <!-- Custom Confirm Modal -->
     <div id="customConfirmModal" class="modal" style="display:none; z-index: 1000000;">
         <div class="modal-content" style="max-width: 400px; text-align: center;">
             <div class="modal-header" style="justify-content: center; background: rgba(255, 165, 0, 0.1); border-bottom: 1px solid rgba(255, 165, 0, 0.2);">
@@ -31,7 +29,6 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
     </div>
 
-    <!-- Custom Prompt Modal -->
     <div id="customPromptModal" class="modal" style="display:none; z-index: 1000000;">
         <div class="modal-content" style="max-width: 400px; text-align: center;">
             <div class="modal-header" style="justify-content: center; background: rgba(0, 195, 255, 0.1); border-bottom: 1px solid rgba(0, 195, 255, 0.2);">
@@ -51,8 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.body.insertAdjacentHTML('beforeend', modalHTML);
 });
-
-// ─── Exposed API ─────────────────────────────────────────────────────────────
 
 window.customAlert = function (message) {
     return new Promise((resolve) => {
@@ -125,7 +120,6 @@ window.customPrompt = function (message, defaultValue = "") {
         inputEl.value = defaultValue;
         modal.style.display = "flex";
 
-        // Use timeout to ensure it focuses after display animation if any
         setTimeout(() => inputEl.focus(), 10);
 
         const cleanup = () => {

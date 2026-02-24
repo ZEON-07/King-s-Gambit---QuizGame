@@ -1,15 +1,7 @@
-// ─── Global State ────────────────────────────────────────────────────────────
-
 const WORKER_URL = 'https://kings-gambit-worker.mr-adhi125.workers.dev';
 const API = WORKER_URL || '';
-
-// ─── Communications ──────────────────────────────────────────────────────────
-
 const channel = new BroadcastChannel("quizChannel");
 window._currentOptions = [];
-
-// ─── Message Listener ────────────────────────────────────────────────────────
-
 channel.onmessage = function (event) {
     const msg = event.data;
     if (!msg || !msg.control) return;
