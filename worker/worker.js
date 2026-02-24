@@ -91,6 +91,16 @@ export default {
         }), { headers: corsHeaders });
       }
 
+      // PUBLIC VIOLATIONS
+      if (is("/api/violation") && method === "POST") {
+        const { team_id } = await request.json();
+        if (!team_id) {
+          return new Response(JSON.stringify({ error: "team_id required" }), { status: 400, headers: corsHeaders });
+        }
+        await env.DB.prepare("INSERT INTO violations (team_id) VALUES (?)").bind(team_id).run();
+        return new Response(JSON.stringify({ success: true }), { headers: corsHeaders });
+      }
+
       // --- ADMIN ROUTES ---
 
       // ADMIN LOGIN
@@ -137,14 +147,25 @@ export default {
           return new Response(JSON.stringify({ success: true, team: { id, team_name: name, passkey, score: 0 } }), { headers: corsHeaders });
         }
         if (method === "DELETE") {
-          const { id } = await request.json();
-          await env.DB.prepare("DELETE FROM teams WHERE id = ?").bind(id).run();
+          const id = url.searchParams.get('id');
+          if (!id) {
+            return new Response(JSON.stringify({ error: "ID required" }), { status: 400, headers: corsHeaders });
+          }
+          await env.DB.batch([
+            env.DB.prepare("DELETE FROM submissions WHERE team_id = ?").bind(id),
+            env.DB.prepare("DELETE FROM violations WHERE team_id = ?").bind(id),
+            env.DB.prepare("DELETE FROM teams WHERE id = ?").bind(id)
+          ]);
           return new Response(JSON.stringify({ success: true }), { headers: corsHeaders });
         }
       }
 
       if (is("/api/admin/teams/all") && method === "DELETE") {
-        await env.DB.prepare("DELETE FROM teams").run();
+        await env.DB.batch([
+          env.DB.prepare("DELETE FROM submissions"),
+          env.DB.prepare("DELETE FROM violations"),
+          env.DB.prepare("DELETE FROM teams")
+        ]);
         return new Response(JSON.stringify({ success: true }), { headers: corsHeaders });
       }
 

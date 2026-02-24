@@ -10,7 +10,7 @@ async function attemptLogin() {
     const btn = document.getElementById('loginBtn');
 
     if (!passkey) {
-        alert("Please enter your passkey!");
+        customAlert("Please enter your passkey!");
         return;
     }
 

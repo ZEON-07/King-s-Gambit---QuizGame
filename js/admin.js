@@ -106,6 +106,14 @@ var buttonStatus = {
                 const broadcastData = { ...qData };
                 delete broadcastData.answer;
                 sendMessage({ control: "setQuestion", data: broadcastData });
+
+                // Auto-start Timer Logic
+                const autoStart = document.getElementById("timerAutoStart")?.value || "options";
+                if (autoStart === "question") {
+                    const duration = parseInt(document.getElementById("timerDuration")?.value) || 30;
+                    sendMessage({ control: "startTimer", data: { duration } });
+                }
+
                 this.active = true;
                 syncCtrlBtn("Q", true);
                 actionSequence.push("QShow");
@@ -128,10 +136,24 @@ var buttonStatus = {
                     choice: currentSelections[t.id] !== undefined ? currentSelections[t.id] : -1
                 }));
 
+                let answerText = "";
+                let optionsData = ["", "", "", ""];
+                if (qData) {
+                    if (Array.isArray(qData.options) && qData.options.length === 4) {
+                        optionsData = qData.options;
+                    } else if (qData.option_a !== undefined) {
+                        optionsData = [qData.option_a, qData.option_b, qData.option_c, qData.option_d];
+                    }
+                    if (qData.answer >= 0 && qData.answer < 4) {
+                        answerText = optionsData[qData.answer] || "";
+                    }
+                }
+
                 sendMessage({
                     control: "showAnswer",
                     data: {
                         answer: qData ? qData.answer : -1,
+                        answerText: answerText,
                         selections: teamData
                     }
                 });
@@ -152,9 +174,15 @@ var buttonStatus = {
                 this.active = false;
                 syncCtrlBtn("SC", false);
             } else {
-                const duration = parseInt(document.getElementById("timerDuration")?.value) || 30;
                 sendMessage({ control: "showOptions" });
-                sendMessage({ control: "startTimer", data: { duration } });
+
+                // Auto-start Timer Logic
+                const autoStart = document.getElementById("timerAutoStart")?.value || "options";
+                if (autoStart === "options") {
+                    const duration = parseInt(document.getElementById("timerDuration")?.value) || 30;
+                    sendMessage({ control: "startTimer", data: { duration } });
+                }
+
                 this.active = true;
                 syncCtrlBtn("SC", true);
                 updatePreview();
@@ -171,9 +199,9 @@ var buttonStatus = {
     DEL: {
         active: false,
         elem: elem("DEL"),
-        action: function () {
+        action: async function () {
             if (!quiz || quiz.length === 0) return;
-            if (!confirm(`Delete Q${qi + 1}: "${quiz[qi].q || quiz[qi].question}"?`)) return;
+            if (!await customConfirm(`Delete Q${qi + 1}: "${quiz[qi].q || quiz[qi].question}"?`)) return;
             quiz.splice(qi, 1);
             if (qi >= quiz.length) qi = Math.max(0, quiz.length - 1);
             updatePreview();
@@ -340,9 +368,12 @@ async function loadSettings() {
             Object.entries(data).forEach(([key, value]) => {
                 if (key === 'timerDuration') document.getElementById("timerDuration").value = value;
                 if (key === 'pointsPerQ') document.getElementById("pointsPerQ").value = value;
+                if (key === 'timerAutoStart') {
+                    const select = document.getElementById("timerAutoStart");
+                    if (select) select.value = value;
+                }
                 if (key === 'leaderboard_enabled') {
                     const enabled = value === 'true';
-                    document.getElementById('leaderboardToggle').checked = enabled;
                     syncLBBtnState(enabled);
                 }
             });
@@ -391,23 +422,23 @@ async function handleJSONUpload(event) {
                 setloaderProgress(100, "#22c55e"); // Success green
                 await loadQuiz(); // Refresh the list
                 setTimeout(() => setloaderProgress(0), 3000);
-                alert("Questions uploaded successfully!");
+                customAlert("Questions uploaded successfully!");
             } else {
                 const data = await res.json().catch(() => ({}));
                 console.error("Upload failed details:", { status: res.status, data });
-                alert(`Upload failed (${res.status}): ` + (data.error || "Unknown error"));
+                customAlert(`Upload failed (${res.status}): ` + (data.error || "Unknown error"));
                 setloaderProgress(100, "#f44"); // Error red
                 setTimeout(() => setloaderProgress(0), 5000);
             }
         } catch (err) {
             console.error("JSON Process Error:", err);
-            alert("Error: " + err.message);
+            customAlert("Error: " + err.message);
             setloaderProgress(100, "#f44");
             setTimeout(() => setloaderProgress(0), 5000);
         }
     };
     reader.onerror = () => {
-        alert("Error reading file.");
+        customAlert("Error reading file.");
         setloaderProgress(0);
     };
     reader.readAsText(file);
@@ -439,12 +470,15 @@ async function loadTeams() {
 }
 
 async function toggleLeaderboard() {
-    const enabled = document.getElementById('leaderboardToggle').checked;
+    const btn = document.getElementById('masterLBBtn');
+    if (!btn) return;
+
+    // Determine the desired toggle state based on current visual state
+    const enabled = !btn.classList.contains('active');
     const token = getAdminToken();
 
     if (!token) {
-        alert("Admin session required. Please login.");
-        document.getElementById('leaderboardToggle').checked = !enabled;
+        customAlert("Admin session required. Please login.");
         return;
     }
 
@@ -462,23 +496,15 @@ async function toggleLeaderboard() {
             syncLBBtnState(enabled);
         } else {
             const data = await res.json();
-            alert("Error: " + (data.error || "Failed to toggle"));
-            document.getElementById('leaderboardToggle').checked = !enabled;
-            syncLBBtnState(!enabled);
+            customAlert("Error: " + (data.error || "Failed to toggle"));
         }
     } catch (e) {
-        alert("Connection error fetching Leaderboard Toggle");
-        document.getElementById('leaderboardToggle').checked = !enabled;
-        syncLBBtnState(!enabled);
+        customAlert("Connection error fetching Leaderboard Toggle");
     }
 }
 
 function toggleGlobalLeaderboard() {
-    const cb = document.getElementById('leaderboardToggle');
-    if (cb) {
-        cb.checked = !cb.checked;
-        toggleLeaderboard();
-    }
+    toggleLeaderboard();
 }
 
 function syncLBBtnState(enabled) {
@@ -486,16 +512,17 @@ function syncLBBtnState(enabled) {
     if (!btn) return;
     if (enabled) {
         btn.classList.add('active');
-        btn.innerHTML = '<i class="fa-solid fa-trophy"></i> LIVE';
+        btn.innerHTML = '<i class="fa-solid fa-trophy"></i>';
     } else {
         btn.classList.remove('active');
-        btn.innerHTML = '<i class="fa-solid fa-trophy"></i> Leaderboard';
+        btn.innerHTML = '<i class="fa-solid fa-trophy"></i>';
     }
 }
 
 async function saveSettings() {
     const timerDuration = parseInt(document.getElementById("timerDuration").value);
     const pointsPerQ = parseInt(document.getElementById("pointsPerQ").value);
+    const timerAutoStart = document.getElementById("timerAutoStart")?.value || "options";
 
     try {
         const res = await fetch(API + '/api/admin/settings', {
@@ -504,16 +531,16 @@ async function saveSettings() {
                 'Content-Type': 'application/json',
                 'X-Admin-Token': getAdminToken()
             },
-            body: JSON.stringify({ timerDuration, pointsPerQ })
+            body: JSON.stringify({ timerDuration, pointsPerQ, timerAutoStart })
         });
         if (res.ok) {
             closeSettingsModal();
         } else {
             const data = await res.json();
-            alert("Error: " + (data.error || "Failed to save settings"));
+            customAlert("Error: " + (data.error || "Failed to save settings"));
         }
     } catch (e) {
-        alert("Network error saving settings");
+        customAlert("Network error saving settings");
     }
 }
 
@@ -612,7 +639,7 @@ function applyPointsToAll() {
     if (quiz.length === 0) return;
     quiz.forEach(q => q.points = pts);
     updatePreview();
-    alert(`Applied ${pts} points to all ${quiz.length} questions.`);
+    customAlert(`Applied ${pts} points to all ${quiz.length} questions.`);
 }
 
 // ─── Messaging ───────────────────────────────────────────────────────────────
@@ -692,7 +719,8 @@ channel.onmessage = function (event) {
         }
         if (isGameFrozen) sendMessage({ control: "masterFreeze" });
 
-        const lbEnabled = document.getElementById('leaderboardToggle')?.checked || false;
+        const lbBtn = document.getElementById('masterLBBtn');
+        const lbEnabled = lbBtn ? lbBtn.classList.contains('active') : false;
         sendMessage({ control: "toggleLeaderboard", data: { enabled: lbEnabled } });
 
         sendMessage({ control: "refreshScore", data: teams });
@@ -767,6 +795,15 @@ function resetControlPad() {
 function ctrlAction(id) {
     if (buttonStatus[id]) {
         toggle(buttonStatus[id], "control");
+    }
+}
+
+// ─── Component Interactions ──────────────────────────────────────────────────
+
+function toggleSettingsPanel() {
+    const settingsBar = document.getElementById('settingsBar');
+    if (settingsBar) {
+        settingsBar.classList.toggle('collapsed');
     }
 }
 
@@ -885,10 +922,10 @@ async function createNewTeam() {
                 broadcastTeams();
             } else {
                 const data = await res.json();
-                alert("Error: " + (data.error || "Failed to create team"));
+                customAlert("Error: " + (data.error || "Failed to create team"));
             }
         } catch (e) {
-            alert("Network error creating team");
+            customAlert("Network error creating team");
         }
     }
 }
@@ -955,7 +992,7 @@ async function renameTeam(id) {
     const team = teams.find(t => t.id === id);
     if (!team) return;
 
-    const newName = prompt("Rename Team:", team.name);
+    const newName = await window.customPrompt("Rename Team:", team.name);
     if (newName && newName.trim() !== "" && newName !== team.name) {
         try {
             const res = await fetch(API + '/api/admin/teams/rename', {
@@ -972,10 +1009,10 @@ async function renameTeam(id) {
                 broadcastTeams();
             } else {
                 const data = await res.json();
-                alert("Error: " + (data.error || "Failed to rename team"));
+                customAlert("Error: " + (data.error || "Failed to rename team"));
             }
         } catch (e) {
-            alert("Network error renaming team");
+            customAlert("Network error renaming team");
         }
     }
 }
@@ -1001,15 +1038,14 @@ async function updateTeamScore(id, val) {
 }
 
 async function deleteTeam(id) {
-    if (confirm("Delete this team?")) {
+    if (await customConfirm("Delete this team?")) {
         try {
-            const res = await fetch(API + '/api/admin/teams', {
+            const res = await fetch(API + `/api/admin/teams?id=${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-Admin-Token': getAdminToken()
-                },
-                body: JSON.stringify({ id })
+                }
             });
 
             if (res.ok) {
@@ -1018,11 +1054,11 @@ async function deleteTeam(id) {
                 broadcastTeams();
             } else {
                 const data = await res.json().catch(() => ({}));
-                alert(`Delete failed (${res.status}): ` + (data.error || "Unknown error"));
+                customAlert(`Delete failed (${res.status}): ` + (data.error || "Unknown error"));
             }
         } catch (e) {
             console.error("Delete team error:", e);
-            alert("Network error: Could not delete team.");
+            customAlert("Network error: Could not delete team.");
         }
     }
 }
@@ -1031,6 +1067,13 @@ async function toggleTeamFreeze(id) {
     const team = teams.find(t => t.id === id);
     if (!team) return;
     team.isFrozen = !team.isFrozen;
+
+    // Broadcast the freeze to the specific team
+    sendMessage({
+        control: team.isFrozen ? "teamFreeze" : "teamUnfreeze",
+        data: { teamId: id }
+    });
+
     updateTeamList();
 }
 
@@ -1043,7 +1086,7 @@ function updateScore() {
 }
 
 async function clearAllQuestions() {
-    if (!confirm("CRITICAL: This will permanently delete ALL questions. Proceed?")) return;
+    if (!await customConfirm("CRITICAL: This will permanently delete ALL questions. Proceed?")) return;
     try {
         const res = await fetch(API + '/api/admin/questions/all', {
             method: 'DELETE',
@@ -1054,13 +1097,13 @@ async function clearAllQuestions() {
             qi = 0;
             resetControlPad();
             updatePreview();
-            alert("All questions cleared.");
+            customAlert("All questions cleared.");
         }
     } catch (e) { console.error(e); }
 }
 
 async function clearAllTeams() {
-    if (!confirm("CRITICAL: This will permanently delete ALL teams. Proceed?")) return;
+    if (!await customConfirm("CRITICAL: This will permanently delete ALL teams. Proceed?")) return;
     try {
         const res = await fetch(API + '/api/admin/teams/all', {
             method: 'DELETE',
@@ -1070,7 +1113,7 @@ async function clearAllTeams() {
             teams = [];
             updateTeamList();
             broadcastTeams();
-            alert("All teams cleared.");
+            customAlert("All teams cleared.");
         }
     } catch (e) { console.error(e); }
 }
@@ -1176,12 +1219,16 @@ async function loadViolations() {
                 return;
             }
 
-            list.innerHTML = violations.map(v => `
+            list.innerHTML = violations.map(v => {
+                const ts = v.timestamp ? new Date(v.timestamp + 'Z') : null;
+                const timeStr = ts && !isNaN(ts.getTime()) ? ts.toLocaleString() : 'Date Unknown';
+                return `
                 <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; margin-bottom: 8px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; border-left: 4px solid #f44;">
                     <div style="font-weight: 600;">${v.name || v.team_name || 'Team'}</div>
-                    <div style="font-size: 0.8em; opacity: 0.6;">${v.timestamp ? new Date(v.timestamp).toLocaleString() : 'Date Unknown'}</div>
+                    <div style="font-size: 0.8em; opacity: 0.6;">${timeStr}</div>
                 </div>
-            `).join('');
+                `;
+            }).join('');
         } else {
             const errData = await res.json().catch(() => ({}));
             list.innerHTML = `<p style="text-align: center; color: #f44; padding: 20px;">Failed to load violations: ${res.status} ${errData.error || ''}</p>`;
@@ -1240,7 +1287,9 @@ async function checkForNewViolations() {
             if (violations.length > 0) {
                 // Check if the most recent violation is newer than our last seen
                 const latest = violations[0];
-                const latestTime = new Date(latest.timestamp).getTime();
+                // SQLite's CURRENT_TIMESTAMP is UTC but lacks the 'Z' suffix
+                // e.g., "2024-02-23 15:30:00". Javascript without 'Z' assumes it's LOCAL time!
+                const latestTime = new Date(latest.timestamp + 'Z').getTime();
 
                 if (latestTime > lastViolationTimestamp) {
                     showViolationAlert(latest.name || latest.team_name || 'Team');

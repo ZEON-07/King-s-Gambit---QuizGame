@@ -98,30 +98,36 @@
         </div>
 
         <!-- Bottom Bar -->
-        <div class="markSettings">
-            <button class="addTeamBtn" title="Add Team" onclick="showTeamModal()">
-                <i class="fa-solid fa-users"></i>
+        <div class="markSettings" id="settingsBar">
+            <button id="collapseSettingsBtn" class="collapseBtn" title="Toggle Sidebar" onclick="toggleSettingsPanel()">
+                <i class="fa-solid fa-chevron-left"></i>
             </button>
-            <button class="configBtn" title="Settings" onclick="showSettingsModal()">
-                <i class="fa-solid fa-gear"></i>
-            </button>
-            <button id="masterLBBtn" class="lbQuickBtn" title="Toggle Leaderboard" onclick="toggleGlobalLeaderboard()">
-                <i class="fa-solid fa-trophy"></i>
-            </button>
-            <button class="violationsBtn" title="Violations" onclick="showViolationsModal()">
-                <i class="fa-solid fa-triangle-exclamation"></i>
-            </button>
-
-            <!-- Relocated & Small JSON Upload -->
-            <input type="file" id="qFile" accept=".json" style="display: none;">
-            <button class="miniLoadBtn" title="Load JSON" onclick="document.getElementById('qFile').click()">
-                <i class="fa-solid fa-file-import"></i>
-            </button>
-
-            <div class="timerPlayback">
-                <button id="masterFreezeBtn" onclick="toggleGameFreeze()" class="freezeBtn" title="Freeze Game">
-                    <i class="fa-solid fa-snowflake"></i>
+            <div class="settings-content" id="settingsContent">
+                <button class="addTeamBtn" title="Add Team" onclick="showTeamModal()">
+                    <i class="fa-solid fa-users"></i>
                 </button>
+                <button class="configBtn" title="Settings" onclick="showSettingsModal()">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+                <button id="masterLBBtn" class="lbQuickBtn" title="Toggle Leaderboard"
+                    onclick="toggleGlobalLeaderboard()">
+                    <i class="fa-solid fa-trophy"></i>
+                </button>
+                <button class="violationsBtn" title="Violations" onclick="showViolationsModal()">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </button>
+
+                <!-- Relocated & Small JSON Upload -->
+                <input type="file" id="qFile" accept=".json" style="display: none;">
+                <button class="miniLoadBtn" title="Load JSON" onclick="document.getElementById('qFile').click()">
+                    <i class="fa-solid fa-file-import"></i>
+                </button>
+
+                <div class="timerPlayback">
+                    <button id="masterFreezeBtn" onclick="toggleGameFreeze()" class="freezeBtn" title="Freeze Game">
+                        <i class="fa-solid fa-snowflake"></i>
+                    </button>
+                </div>
             </div>
 
             <div id="qstatus_bar_mini">
@@ -179,46 +185,54 @@
     </div>
 
     <!-- Settings Modal -->
-    <div id="settingsModal"
-        style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.7); z-index:9999; justify-content:center; align-items:center;">
-        <div
-            style="background:#1a1a1a; border:1px solid #444; border-radius:12px; padding:2rem; width:320px; color:white;">
-            <h3 style="margin-top:0;"><i class="fa-solid fa-gear"></i> Settings</h3>
-            <label style="display:block; margin-bottom:6px;">Timer Duration (seconds)</label>
-            <input id="timerDuration" type="number" value="30" min="5" max="300"
-                style="width:100%; padding:8px; margin-bottom:16px; background:#222; border:1px solid #555; border-radius:6px; color:white; box-sizing:border-box;">
-            <label style="display:block; margin-bottom:6px;">Points per Correct Answer</label>
-            <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
-                <input id="pointsPerQ" type="number" value="10" min="1" max="999"
-                    style="flex:1; padding:8px; background:#222; border:1px solid #555; border-radius:6px; color:white; box-sizing:border-box;">
-                <button onclick="applyPointsToAll()"
-                    style="padding:8px 14px; background:#333; border:1px solid #555; border-radius:6px; color:#aaa; font-size:0.85rem; cursor:pointer; white-space:nowrap;">Apply
-                    to All Qs</button>
-            </div>
-            <label style="display:flex; align-items:center; gap:10px; cursor:pointer; padding:4px 0;">
-                <input id="leaderboardToggle" type="checkbox" onchange="toggleLeaderboard()"
-                    style="width:18px; height:18px; cursor:pointer;">
-                <span style="font-size:0.9rem; font-weight:600; color:#00c3ff;">Enable Leaderboard (Worker)</span>
-            </label>
-            <div style="display:flex; gap:8px; margin-bottom: 20px;">
-                <button onclick="saveSettings()"
-                    style="flex:1; padding:10px; background:#00c3ff; color:black; border:none; border-radius:6px; font-weight:bold; cursor:pointer;"><i
-                        class="fa-solid fa-floppy-disk"></i> Save</button>
-                <button onclick="closeSettingsModal()"
-                    style="flex:1; padding:10px; background:#444; color:white; border:none; border-radius:6px; cursor:pointer;">Cancel</button>
+    <div id="settingsModal" class="modal" style="display:none;">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-gear" style="color:#00c3ff;"></i> Settings</h2>
+                <button class="close-btn" onclick="closeSettingsModal()">&times;</button>
             </div>
 
-            <!-- Danger Zone -->
-            <div class="danger-zone">
-                <div class="danger-label"><i class="fa-solid fa-triangle-exclamation"></i> DANGER ZONE</div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px;">
-                    <button class="danger-btn" onclick="clearAllTeams()" title="Delete all teams permanently">
-                        <i class="fa-solid fa-users-slash"></i> TEAMS
-                    </button>
-                    <button class="danger-btn" onclick="clearAllQuestions()" title="Delete all questions permanently">
-                        <i class="fa-solid fa-file-circle-xmark"></i> QUESTIONS
-                    </button>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Timer Duration (seconds)</label>
+                    <input id="timerDuration" type="number" class="settings-input" value="30" min="5" max="300">
                 </div>
+
+                <div class="form-group">
+                    <label>Points per Correct Answer</label>
+                    <div class="input-with-action">
+                        <input id="pointsPerQ" type="number" class="settings-input" value="10" min="1" max="999">
+                        <button class="action-btn" onclick="applyPointsToAll()">Apply to All Qs</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Auto-Start Timer</label>
+                    <select id="timerAutoStart" class="settings-input">
+                        <option value="options">When Options Appear</option>
+                        <option value="question">When Question Appears</option>
+                        <option value="manual">Manual</option>
+                    </select>
+                </div>
+
+                <!-- Danger Zone -->
+                <div class="danger-zone">
+                    <div class="danger-label"><i class="fa-solid fa-triangle-exclamation"></i> DANGER ZONE</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px;">
+                        <button class="danger-btn" onclick="clearAllTeams()" title="Delete all teams permanently">
+                            <i class="fa-solid fa-users-slash"></i> TEAMS
+                        </button>
+                        <button class="danger-btn" onclick="clearAllQuestions()"
+                            title="Delete all questions permanently">
+                            <i class="fa-solid fa-file-circle-xmark"></i> QUESTIONS
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="secondary" onclick="closeSettingsModal()">Cancel</button>
+                <button class="primary" onclick="saveSettings()"><i class="fa-solid fa-floppy-disk"></i> Save</button>
             </div>
         </div>
     </div>
@@ -227,6 +241,7 @@
         &copy; <span id="footerYear"></span> TRAIN 303. ALL RIGHTS RESERVED.
     </footer>
     <script>document.getElementById('footerYear').innerText = new Date().getFullYear();</script>
+    <script src="js/modals.js"></script>
     <script src="js/admin.js"></script>
     <!-- Violations Modal -->
     <div id="violationsModal" class="modal" style="display:none;">
@@ -248,6 +263,8 @@
             </div>
         </div>
     </div>
+    </div>
+
 </body>
 
 </html>

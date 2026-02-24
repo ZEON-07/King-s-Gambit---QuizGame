@@ -66,8 +66,9 @@ body {
 }
 
 #previewA {
-    font-size: 2rem;
+    font-size: 4.5rem;
     font-weight: 800;
+    line-height: 1.1;
     background: linear-gradient(135deg, #00c3ff, #a855f7);
     -webkit-background-clip: text;
     background-clip: text;

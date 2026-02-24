@@ -20,17 +20,74 @@ var connectApp = {
 
 // ─── Visibility Detection ────────────────────────────────────────────────────
 
+// ─── Violation Queue System ────────────────────────────────────────────────────
+// Browsers notoriously kill fetch requests made exactly as a tab unloads or blurs.
+// We queue them in localStorage and sync them constantly in the background.
+
+function pushViolationToQueue() {
+  const teamId = localStorage.getItem("team_id");
+  if (!teamId) return;
+
+  let q = [];
+  try {
+    const stored = localStorage.getItem("violation_queue");
+    if (stored) q = JSON.parse(stored);
+  } catch (e) { }
+
+  // Debounce: don't log a new violation if one was logged within the last 3000ms
+  const now = Date.now();
+  if (q.length > 0) {
+    const last = q[q.length - 1];
+    if (now - last.time < 3000) return;
+  }
+
+  q.push({ team_id: teamId, time: now });
+  localStorage.setItem("violation_queue", JSON.stringify(q));
+}
+
+async function syncViolations() {
+  if (!API) return;
+  let q = [];
+  try {
+    const stored = localStorage.getItem("violation_queue");
+    if (stored) q = JSON.parse(stored);
+  } catch (e) { }
+
+  if (q.length === 0) return;
+
+  // Take the first violation (process one at a time for safety)
+  const v = q[0];
+
+  try {
+    const res = await fetch(API + "/api/violation", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ team_id: v.team_id }),
+      keepalive: true
+    });
+
+    if (res.ok) {
+      // Successfully sent to DB! Remove it from queue.
+      q.shift();
+      localStorage.setItem("violation_queue", JSON.stringify(q));
+    }
+  } catch (e) {
+    // Keep in queue for next sync cycle
+    console.warn("Delaying violation sync:", e);
+  }
+}
+
+// Check every 2 seconds if we owe the server a violation report
+setInterval(syncViolations, 2000);
+
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "hidden") {
-    const teamId = localStorage.getItem("team_id");
-    if (teamId && API) {
-      fetch(API + "/api/violation", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ team_id: teamId }),
-      }).catch((e) => console.warn("Failed to report violation:", e));
-    }
+    pushViolationToQueue();
   }
+});
+
+window.addEventListener("blur", () => {
+  pushViolationToQueue();
 });
 
 // ─── Startup ─────────────────────────────────────────────────────────────────
@@ -206,9 +263,11 @@ channel.onmessage = async (event) => {
   if (msg.control === "showAnswer") {
     stopTimer();
     const answerIndex = msg.data?.answer;
+    const answerText = msg.data?.answerText || "";
     const grid = document.getElementById("optionsGrid");
-    if (grid) {
-      grid.classList.add("visible");
+
+    // Determine if options have been shown yet
+    if (grid && grid.classList.contains("visible")) {
       const myChoice = window._myLockedChoice;
       for (let i = 0; i < 4; i++) {
         const btn = document.getElementById("opt" + i);
@@ -231,9 +290,17 @@ channel.onmessage = async (event) => {
         if (window._feedbackTimeout) clearTimeout(window._feedbackTimeout);
         window._feedbackTimeout = setTimeout(() => overlay.classList.remove("show"), 3000);
       }
+    } else {
+      // Options skipped, just show the answer directly
+      A("set", answerText || "No answer provided");
+      A("show");
+      // Ensure Q continues to be visible if we skipped options
+      // But since standard behaviour is Q hides when A shows, keep original behaviour:
     }
+
+    // Always call show
+    A("set", answerText);
     A("show");
-    Q("hide");
   }
 
   if (msg.control === "hideAnswer") {
@@ -413,12 +480,11 @@ function Q(action, q) {
 function A(action, a) {
   if (action == "hide") {
     asd.style.opacity = "0";
-    asd.style.transform = "translateY(110%)";
-    sleep(300).then(() => qsd.style.transform = "translateY(0%)");
+    asd.style.transform = "translateY(50%)";
   }
   if (action == "show") {
     asd.style.opacity = "1";
-    asd.style.transform = "translateY(-110%)";
+    asd.style.transform = "translateY(0%)";
   }
   if (action == "set") asd.innerHTML = a;
 }
@@ -463,9 +529,9 @@ async function selectOption(index) {
       const data = await res.json();
       if (!res.ok) {
         if (data.error && data.error.includes("Already submitted")) {
-          alert("Already submitted!");
+          customAlert("Already submitted!");
         } else if (res.status === 403) {
-          alert("Session expired. Please log in again.");
+          customAlert("Session expired. Please log in again.");
           window.location.href = 'index.html';
         }
       }

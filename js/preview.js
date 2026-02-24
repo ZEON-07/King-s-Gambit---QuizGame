@@ -51,32 +51,44 @@ channel.onmessage = function (event) {
 
     if (msg.control === "showAnswer") {
         const answerIndex = msg.data?.answer ?? window._previewAnswer;
+        const answerText = msg.data?.answerText || "";
         const selections = msg.data?.selections || [];
 
+        const grid = document.getElementById("optionsGrid");
         const aEl = document.getElementById("previewA");
-        if (aEl && answerIndex >= 0) {
-            aEl.innerText = window._currentOptions[answerIndex] || "";
-            aEl.classList.add("visible");
-        }
 
-        document.getElementById("optionsGrid")?.classList.add("visible");
-        for (let i = 0; i < 4; i++) {
-            const card = document.getElementById("opt" + i);
-            const badgeContainer = document.getElementById("badges" + i);
-            if (card) {
-                card.classList.remove("correct");
-                if (i === answerIndex) card.classList.add("correct");
+        if (grid && grid.classList.contains("visible")) {
+            // Options were shown, so highlight the correct one
+            if (aEl && answerIndex >= 0) {
+                aEl.innerText = window._currentOptions[answerIndex] || "";
+                aEl.classList.add("visible");
             }
-            if (badgeContainer) {
-                badgeContainer.innerHTML = "";
-                const pickers = selections.filter(s => s.choice === i);
-                pickers.forEach(p => {
-                    const badge = document.createElement("div");
-                    badge.className = "teamBadge";
-                    badge.innerText = p.name;
-                    badgeContainer.appendChild(badge);
-                });
+
+            for (let i = 0; i < 4; i++) {
+                const card = document.getElementById("opt" + i);
+                const badgeContainer = document.getElementById("badges" + i);
+                if (card) {
+                    card.classList.remove("correct");
+                    if (i === answerIndex) card.classList.add("correct");
+                }
+                if (badgeContainer) {
+                    badgeContainer.innerHTML = "";
+                    const pickers = selections.filter(s => s.choice === i);
+                    pickers.forEach(p => {
+                        const badge = document.createElement("div");
+                        badge.className = "teamBadge";
+                        badge.innerText = p.name;
+                        badgeContainer.appendChild(badge);
+                    });
+                }
             }
+        } else {
+            // Options were skipped, just show the answer directly
+            if (aEl) {
+                aEl.innerText = answerText || window._currentOptions[answerIndex] || "No answer provided";
+                aEl.classList.add("visible");
+            }
+            document.getElementById("divider")?.classList.add("visible");
         }
     }
 
