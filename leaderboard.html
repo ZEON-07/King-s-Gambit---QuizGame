@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>King's Gambit — Leaderboard</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/leaderboard.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="lb-header">
+        <div class="logo"><i class="fa-solid fa-chess-pawn"></i></div>
+        <h1>LEADERBOARD</h1>
+        <p>King's Gambit Quiz</p>
+    </div>
+
+    <div id="lbStatus">
+        <span id="liveIndicator">
+            <span></span>
+            LIVE
+        </span>
+        <span id="lastUpdated">Updated just now</span>
+    </div>
+
+    <div id="lbContent">
+        <!-- Populated by JS -->
+        <div class="lb-locked">
+            <div class="lock-icon"><i class="fa-solid fa-spinner fa-spin"></i></div>
+            <h2>Loading…</h2>
+        </div>
+    </div>
+
+    <button class="refresh-btn" onclick="manualRefresh()">
+        <i class="fa-solid fa-rotate-right"></i> Refresh
+    </button>
+
+    <footer class="site-footer">
+        &copy; <span id="footerYear"></span> TRAIN 303. ALL RIGHTS RESERVED.
+    </footer>
+    <script>document.getElementById('footerYear').innerText = new Date().getFullYear();</script>
+    <script src="js/leaderboard.js"></script>
+</body>
+
+</html>

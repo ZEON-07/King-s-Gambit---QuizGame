@@ -1,0 +1,207 @@
+/* ─── Base Styles */
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 40px 20px;
+    box-sizing: border-box;
+    background: #000;
+}
+
+/* ─── Header*/
+
+.lb-header {
+    text-align: center;
+    margin-bottom: 36px;
+}
+
+.lb-header h1 {
+    font-size: 2.5rem;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    color: #fff;
+    margin: 0 0 4px;
+}
+
+.lb-header p {
+    color: #555;
+    font-size: 0.9rem;
+    margin: 0;
+    font-weight: 600;
+}
+
+/* ─── Status Indicator*/
+
+#lbStatus {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #444;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+#liveIndicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #22c55e;
+}
+
+#liveIndicator span {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: #22c55e;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #22c55e;
+    animation: pulseIndicator 2s infinite;
+}
+
+@keyframes pulseIndicator {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(0.8);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ─── Table & Rows ──────────────────────────────────────────────────────────── */
+
+#lbContent {
+    width: 100%;
+    max-width: 540px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.lb-row {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    gap: 16px;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: all 0.2s;
+}
+
+.lb-row:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(0, 195, 255, 0.3);
+    transform: translateX(4px);
+}
+
+.lb-row.rank-1 {
+    border-color: rgba(255, 215, 0, 0.4);
+    background: linear-gradient(90deg, rgba(255, 215, 0, 0.08), transparent);
+}
+
+.lb-rank {
+    font-size: 1rem;
+    font-weight: 900;
+    width: 30px;
+    text-align: center;
+    color: #444;
+}
+
+.rank-1 .lb-rank {
+    color: #ffd700;
+}
+
+.rank-2 .lb-rank {
+    color: #c0c0c0;
+}
+
+.rank-3 .lb-rank {
+    color: #cd7f32;
+}
+
+.lb-medal {
+    font-size: 1.4rem;
+    width: 30px;
+    text-align: center;
+}
+
+.lb-name {
+    flex: 1;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #eee;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.lb-score {
+    font-size: 1.4rem;
+    font-weight: 950;
+    color: #00c3ff;
+}
+
+.lb-pts {
+    font-size: 0.75rem;
+    color: #444;
+    font-weight: 800;
+    margin-left: 4px;
+    text-transform: uppercase;
+}
+
+/* ─── Controls ─────────────────────────────────────────────────────────────── */
+
+.refresh-btn {
+    margin-top: 40px;
+    padding: 12px 30px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    color: #888;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.refresh-btn:hover {
+    background: rgba(0, 195, 255, 0.1);
+    border-color: #00c3ff;
+    color: #00c3ff;
+    transform: translateY(-2px);
+}
+
+/* ─── States ────────────────────────────────────────────────────────────────── */
+
+.lb-locked {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    color: #555;
+    margin-top: 60px;
+    text-align: center;
+}

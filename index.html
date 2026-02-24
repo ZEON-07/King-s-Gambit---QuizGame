@@ -2,107 +2,43 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="quiz.css" />
-  <title>Quiz Finale</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — King's Gambit</title>
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/login.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
-<body style="opacity: 0;">
-  <div class="quizDisplay">
-    <h1 class="quizQ">Q</h1>
-    <h2 class="quizA">A</h2>
-  </div>
-  <div class="scoreMaster">
-    <div class="scoreCard">
-      <p id="p1Name">Havis</p>
-      <p id="p1Score">69</p>
+<body>
+
+  <div class="loginBox glass">
+    <div class="logo"><i class="fa-solid fa-chess-pawn"></i></div>
+    <h2>King's Gambit</h2>
+    <p id="loginStatus">Enter your team passkey to join</p>
+
+    <div class="loginInputs">
+      <input type="text" id="teamPass" placeholder="e.g. AB1234" maxlength="10">
     </div>
 
-    <div class="scoreCard">
-      <p id="p2Name">Havis</p>
-      <p id="p2Score">69</p>
-    </div>
-
-    <div class="scoreCard">
-      <p id="p3Name">Havis</p>
-      <p id="p3Score">69</p>
-    </div>
-
-    <div class="scoreCard">
-      <p id="p4Name">Havis</p>
-      <p id="p4Score">69</p>
-    </div>
-
-    <div class="scoreCard">
-      <p id="p5Name">Havis</p>
-      <p id="p5Score">69</p>
-    </div>
-
-    <div class="scoreCard">
-      <p id="p6Name">Havis</p>
-      <p id="p6Score">69</p>
-    </div>
+    <button id="loginBtn" onclick="attemptLogin()">
+      <i class="fa-solid fa-chess-king"></i> Enter the Arena
+    </button>
   </div>
 
-  <script src="quizConnect.js"></script>
+  <!-- Floating Preview Button -->
+  <a href="preview.html" target="_blank" class="previewBtn">
+    <i class="fa-solid fa-eye"></i> Preview
+  </a>
+
+  <footer class="site-footer">
+    &copy; <span id="footerYear"></span> TRAIN 303. ALL RIGHTS RESERVED.
+  </footer>
+  <script>document.getElementById('footerYear').innerText = new Date().getFullYear();</script>
+  <script src="js/login.js"></script>
 </body>
 
 </html>
-
-<div class="leaflet-pm-toolbar leaflet-pm-custom leaflet-bar leaflet-control">
-  <div class="button-container pos-right" title="Add RSSIhub">
-    <a class="leaflet-buttons-control-button customButtonCss" role="button" tabindex="0" href="#">
-      <div class="control-icon leaflet-pm-icon-RSSIhub custom-icon blue-marker"></div>
-    </a>
-    <div class="leaflet-pm-actions-container pos-right"></div>
-  </div>
-  <div class="button-container pos-right" title="Add Go1000">
-    <a class="leaflet-buttons-control-button customButtonCss" role="button" tabindex="0" href="#">
-      <div class="control-icon leaflet-pm-icon-Go1000 custom-icon red-marker"></div>
-    </a>
-    <div class="leaflet-pm-actions-container pos-right"></div>
-  </div>
-  <div class="button-container pos-right" title="Add Box5200">
-    <a class="leaflet-buttons-control-button customButtonCss" role="button" tabindex="0" href="#">
-      <div class="control-icon leaflet-pm-icon-Box5200 custom-icon grey-marker"></div>
-    </a>
-    <div class="leaflet-pm-actions-container pos-right"></div>
-  </div>
-  <div class="button-container pos-right" title="Add Box10800">
-    <a class="leaflet-buttons-control-button customButtonCss" role="button" tabindex="0" href="#">
-      <div class="control-icon leaflet-pm-icon-Box10800 custom-icon green-marker"></div>
-    </a>
-    <div class="leaflet-pm-actions-container pos-right"></div>
-  </div>
-  <div class="button-container pos-right" title="Add OutdoorMini5400">
-    <a class="leaflet-buttons-control-button customButtonCss" role="button" tabindex="0" href="#">
-      <div class="control-icon leaflet-pm-icon-OutdoorMini5400 custom-icon yellow-marker"></div>
-    </a>
-    <div class="leaflet-pm-actions-container pos-right"></div>
-  </div>
-  <div class="button-container pos-right" title="Add Box230">
-    <a class="leaflet-buttons-control-button customButtonCss" role="button" tabindex="0" href="#">
-      <div class="control-icon leaflet-pm-icon-Box230 custom-icon purple-marker"></div>
-    </a>
-    <div class="leaflet-pm-actions-container pos-right"></div>
-  </div>
-  <div class="button-container pos-right" title="Add OutdoorExtreme4000">
-    <a class="leaflet-buttons-control-button customButtonCss" role="button" tabindex="0" href="#">
-      <div class="control-icon leaflet-pm-icon-OutdoorExtreme4000 custom-icon orange-marker"></div>
-    </a>
-    <div class="leaflet-pm-actions-container pos-right"></div>
-  </div>
-  <div class="button-container pos-right" title="Add GoMini">
-    <a class="leaflet-buttons-control-button customButtonCss" role="button" tabindex="0" href="#">
-      <div class="control-icon leaflet-pm-icon-GoMini custom-icon teal-marker"></div>
-    </a>
-    <div class="leaflet-pm-actions-container pos-right"></div>
-  </div>
-  <div class="button-container pos-right" title="Add Go500">
-    <a class="leaflet-buttons-control-button customButtonCss" role="button" tabindex="0" href="#">
-      <div class="control-icon leaflet-pm-icon-Go500 custom-icon pink-marker"></div>
-    </a>
-    <div class="leaflet-pm-actions-container pos-right"></div>
-  </div>
-</div>

@@ -1,0 +1,169 @@
+/* ─── Base Styles ───────────────────────────────────────────────────────────── */
+
+body {
+    background: #000;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    color: white;
+    font-family: 'Outfit', sans-serif;
+}
+
+.previewBadge {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #666;
+    letter-spacing: 0.05em;
+    z-index: 1000;
+}
+
+/* ─── Preview Main ──────────────────────────────────────────────────────────── */
+
+.previewWrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    max-width: 800px;
+    text-align: center;
+}
+
+.pointsBadge {
+    background: rgba(0, 195, 255, 0.1);
+    border: 1px solid rgba(0, 195, 255, 0.3);
+    color: #00c3ff;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    margin-bottom: 30px;
+}
+
+#previewQ {
+    font-size: 2.8rem;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    transition: all 0.3s;
+}
+
+#previewQ.empty {
+    color: #333;
+}
+
+#previewA {
+    font-size: 2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #00c3ff, #a855f7);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.4s ease;
+}
+
+#previewA.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.divider {
+    width: 50px;
+    height: 4px;
+    background: linear-gradient(90deg, #00c3ff, #a855f7);
+    border-radius: 2px;
+    margin: 25px 0;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.divider.visible {
+    opacity: 1;
+}
+
+/* ─── Options Grid ──────────────────────────────────────────────────────────── */
+
+.optionsGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    width: 100%;
+    margin-top: 20px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.4s ease;
+}
+
+.optionsGrid.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.optionCard {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 16px 20px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+}
+
+.optionCard.correct {
+    border-color: rgba(34, 197, 94, 0.5);
+    background: rgba(34, 197, 94, 0.05);
+}
+
+.optionLetter {
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+}
+
+.optionText {
+    font-weight: 600;
+    color: #888;
+    font-size: 1rem;
+}
+
+.teamBadges {
+    margin-left: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    justify-content: flex-end;
+}
+
+.teamBadge {
+    padding: 3px 8px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #aaa;
+}

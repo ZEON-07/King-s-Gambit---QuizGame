@@ -1,0 +1,132 @@
+/* ─── Base Styles ───────────────────────────────────────────────────────────── */
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background: #000;
+}
+
+/* ─── Login Box ─────────────────────────────────────────────────────────────── */
+
+.loginBox {
+    padding: 2.5rem;
+    border-radius: 20px;
+    text-align: center;
+    width: 320px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.logo {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+}
+
+h2 {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    margin: 0 0 0.5rem;
+    color: #fff;
+}
+
+#loginStatus {
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 2rem;
+    min-height: 1.2rem;
+}
+
+/* ─── Inputs & Buttons ──────────────────────────────────────────────────────── */
+
+.loginInputs {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+#teamPass {
+    width: 100%;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: white;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.1rem;
+    text-align: center;
+    letter-spacing: 0.2em;
+    font-weight: 800;
+    text-transform: uppercase;
+    box-sizing: border-box;
+    outline: none;
+}
+
+#teamPass:focus {
+    border-color: #00c3ff;
+    box-shadow: 0 0 15px rgba(0, 195, 255, 0.2);
+}
+
+#loginBtn {
+    background: linear-gradient(135deg, #00c3ff, #0077ff);
+    color: black;
+    border: none;
+    padding: 14px;
+    border-radius: 10px;
+    font-weight: 900;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.2s;
+    box-shadow: 0 8px 20px rgba(0, 195, 255, 0.3);
+}
+
+#loginBtn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 195, 255, 0.4);
+}
+
+#loginBtn:disabled {
+    opacity: 0.7;
+    cursor: default;
+}
+
+/* ─── Preview Button ────────────────────────────────────────────────────────── */
+
+.previewBtn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 16px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 30px;
+    color: #aaa;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    backdrop-filter: blur(8px);
+    transition: all 0.2s;
+}
+
+.previewBtn:hover {
+    background: rgba(0, 195, 255, 0.12);
+    color: #00c3ff;
+    border-color: rgba(0, 195, 255, 0.3);
+}

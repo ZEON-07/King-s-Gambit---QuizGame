@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/global.css">
+    <title>Admin Panel - King's Gambit</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- Admin Password Gate -->
+    <div id="adminGate">
+        <div class="gateBox">
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;"><i class="fa-solid fa-lock"
+                    style="color:#00c3ff;"></i></div>
+            <h2>ADMIN ACCESS</h2>
+            <p>King's Gambit Quiz Control</p>
+            <input id="adminPassInput" type="password" placeholder="Enter admin password"
+                onkeydown="if(event.key==='Enter') checkAdminPass()">
+            <div id="adminPassError"></div>
+            <button class="gateBtn" onclick="checkAdminPass()">UNLOCK</button>
+        </div>
+    </div>
+    <div class="controlCenter">
+
+        <!-- Question Preview -->
+        <div class="qPreview">
+            <div id="lpq" class="localPreviewQ empty" onclick="resetControlPad()">Waiting for next question...</div>
+            <div id="lpa" class="localPreviewA" onclick="ctrlAction('ANS')"></div>
+            <div id="lpDivider" class="localDivider"></div>
+            <div id="lpOptions" class="localOptionsGrid" onclick="ctrlAction('SC')">
+                <div class="localOptionCard" id="lpOpt0">
+                    <span class="localOptionLetter">A</span>
+                    <span class="localOptionText"></span>
+                    <div class="localTeamBadges" id="lpBadges0"></div>
+                </div>
+                <div class="localOptionCard" id="lpOpt1">
+                    <span class="localOptionLetter">B</span>
+                    <span class="localOptionText"></span>
+                    <div class="localTeamBadges" id="lpBadges1"></div>
+                </div>
+                <div class="localOptionCard" id="lpOpt2">
+                    <span class="localOptionLetter">C</span>
+                    <span class="localOptionText"></span>
+                    <div class="localTeamBadges" id="lpBadges2"></div>
+                </div>
+                <div class="localOptionCard" id="lpOpt3">
+                    <span class="localOptionLetter">D</span>
+                    <span class="localOptionText"></span>
+                    <div class="localTeamBadges" id="lpBadges3"></div>
+                </div>
+            </div>
+            <div id="lpPointsPill" class="localPointsPill">
+                <span id="lpPointsBadge">PTS</span>
+                <div style="width:1px; height:10px; background:rgba(0,195,255,0.3); margin:0 2px;"></div>
+                <input id="qPointsOverride" type="number" min="1" max="999" value="10"
+                    oninput="overrideCurrentPoints(this.value)" title="Override Points">
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="qControl">
+            <button id="qPrev" onclick="toggle(buttonStatus[this.id],'control')"><i
+                    class="fa-solid fa-chevron-left"></i></button>
+            <button id="qNext" onclick="toggle(buttonStatus[this.id],'control')"><i
+                    class="fa-solid fa-chevron-right"></i></button>
+        </div>
+
+        <!-- Control Buttons -->
+        <div class="ctrlGrid">
+            <!-- Row 1 -->
+            <div class="ctrlBtn" id="Q" onclick="ctrlAction('Q')">
+                <i class="fa-solid fa-question"></i><br>Q
+            </div>
+            <div class="ctrlBtn" id="SC" onclick="ctrlAction('SC')">
+                <i class="fa-solid fa-list"></i><br>OP
+            </div>
+            <div class="ctrlBtn warn" id="PAUSE" onclick="ctrlAction('PAUSE')">
+                <i class="fa-solid fa-pause"></i><br>PAUSE
+            </div>
+            <!-- Row 2 -->
+            <div class="ctrlBtn" id="ANS" onclick="ctrlAction('ANS')">
+                <i class="fa-solid fa-check-circle"></i><br>ANS
+            </div>
+            <div class="ctrlBtn ann" id="ANN" onclick="showAnnModal()">
+                <i class="fa-solid fa-bullhorn"></i><br>ANN
+            </div>
+            <div class="ctrlBtn danger" id="DEL" onclick="ctrlAction('DEL')">
+                <i class="fa-solid fa-trash"></i><br>DEL
+            </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="markSettings">
+            <button class="addTeamBtn" title="Add Team" onclick="showTeamModal()">
+                <i class="fa-solid fa-users"></i>
+            </button>
+            <button class="configBtn" title="Settings" onclick="showSettingsModal()">
+                <i class="fa-solid fa-gear"></i>
+            </button>
+            <button id="masterLBBtn" class="lbQuickBtn" title="Toggle Leaderboard" onclick="toggleGlobalLeaderboard()">
+                <i class="fa-solid fa-trophy"></i>
+            </button>
+            <button class="violationsBtn" title="Violations" onclick="showViolationsModal()">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </button>
+
+            <!-- Relocated & Small JSON Upload -->
+            <input type="file" id="qFile" accept=".json" style="display: none;">
+            <button class="miniLoadBtn" title="Load JSON" onclick="document.getElementById('qFile').click()">
+                <i class="fa-solid fa-file-import"></i>
+            </button>
+
+            <div class="timerPlayback">
+                <button id="masterFreezeBtn" onclick="toggleGameFreeze()" class="freezeBtn" title="Freeze Game">
+                    <i class="fa-solid fa-snowflake"></i>
+                </button>
+            </div>
+
+            <div id="qstatus_bar_mini">
+                <div id="qstatus"></div>
+            </div>
+        </div>
+
+        <!-- Team List -->
+        <div class="scoreChart" id="teamList"></div>
+    </div>
+
+    <div id="violationToast" class="violation-toast">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <span id="violationToastText">TEAM COMMITTED A VIOLATION!</span>
+    </div>
+
+    <!-- Announcement Modal -->
+    <div id="annModal"
+        style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.75); z-index:9999; justify-content:center; align-items:center;">
+        <div
+            style="background:#1a1a1a; border:1px solid #a855f7; border-radius:14px; padding:2rem; width:360px; color:white;">
+            <h3 style="margin-top:0;"><i class="fa-solid fa-bullhorn" style="color:#a855f7;"></i> Announcement</h3>
+            <textarea id="annText" rows="4" placeholder="Type your announcement..."
+                style="width:100%; padding:10px; background:#111; border:1px solid #555; border-radius:8px; color:white; font-size:1rem; resize:vertical; box-sizing:border-box; margin-bottom:12px;"></textarea>
+            <div style="display:flex; gap:8px;">
+                <button onclick="sendAnnouncement()"
+                    style="flex:1; padding:10px; background:#a855f7; color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">
+                    <i class="fa-solid fa-paper-plane"></i> Send</button>
+                <button onclick="clearAnnouncement()"
+                    style="flex:1; padding:10px; background:#333; color:#aaa; border:1px solid #555; border-radius:8px; cursor:pointer;">
+                    Clear</button>
+                <button onclick="closeAnnModal()"
+                    style="padding:10px 14px; background:#222; color:#888; border:1px solid #444; border-radius:8px; cursor:pointer;">
+                    <i class="fa-solid fa-xmark"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Team Modal -->
+    <div id="teamModal"
+        style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.7); z-index:9999; justify-content:center; align-items:center;">
+        <div
+            style="background:#1a1a1a; border:1px solid #444; border-radius:12px; padding:2rem; width:300px; color:white;">
+            <h3 style="margin-top:0;"><i class="fa-solid fa-users"></i> Create Team</h3>
+            <input id="newTeamName" type="text" placeholder="Team Name"
+                style="width:100%; padding:8px; margin-bottom:16px; background:#222; border:1px solid #555; border-radius:6px; color:white; box-sizing:border-box;">
+            <div style="display:flex; gap:8px;">
+                <button onclick="createNewTeam()"
+                    style="flex:1; padding:10px; background:#00c3ff; color:black; border:none; border-radius:6px; font-weight:bold; cursor:pointer;"><i
+                        class="fa-solid fa-plus"></i> Add</button>
+                <button onclick="closeTeamModal()"
+                    style="flex:1; padding:10px; background:#444; color:white; border:none; border-radius:6px; cursor:pointer;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal"
+        style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.7); z-index:9999; justify-content:center; align-items:center;">
+        <div
+            style="background:#1a1a1a; border:1px solid #444; border-radius:12px; padding:2rem; width:320px; color:white;">
+            <h3 style="margin-top:0;"><i class="fa-solid fa-gear"></i> Settings</h3>
+            <label style="display:block; margin-bottom:6px;">Timer Duration (seconds)</label>
+            <input id="timerDuration" type="number" value="30" min="5" max="300"
+                style="width:100%; padding:8px; margin-bottom:16px; background:#222; border:1px solid #555; border-radius:6px; color:white; box-sizing:border-box;">
+            <label style="display:block; margin-bottom:6px;">Points per Correct Answer</label>
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+                <input id="pointsPerQ" type="number" value="10" min="1" max="999"
+                    style="flex:1; padding:8px; background:#222; border:1px solid #555; border-radius:6px; color:white; box-sizing:border-box;">
+                <button onclick="applyPointsToAll()"
+                    style="padding:8px 14px; background:#333; border:1px solid #555; border-radius:6px; color:#aaa; font-size:0.85rem; cursor:pointer; white-space:nowrap;">Apply
+                    to All Qs</button>
+            </div>
+            <label style="display:flex; align-items:center; gap:10px; cursor:pointer; padding:4px 0;">
+                <input id="leaderboardToggle" type="checkbox" onchange="toggleLeaderboard()"
+                    style="width:18px; height:18px; cursor:pointer;">
+                <span style="font-size:0.9rem; font-weight:600; color:#00c3ff;">Enable Leaderboard (Worker)</span>
+            </label>
+            <div style="display:flex; gap:8px; margin-bottom: 20px;">
+                <button onclick="saveSettings()"
+                    style="flex:1; padding:10px; background:#00c3ff; color:black; border:none; border-radius:6px; font-weight:bold; cursor:pointer;"><i
+                        class="fa-solid fa-floppy-disk"></i> Save</button>
+                <button onclick="closeSettingsModal()"
+                    style="flex:1; padding:10px; background:#444; color:white; border:none; border-radius:6px; cursor:pointer;">Cancel</button>
+            </div>
+
+            <!-- Danger Zone -->
+            <div class="danger-zone">
+                <div class="danger-label"><i class="fa-solid fa-triangle-exclamation"></i> DANGER ZONE</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px;">
+                    <button class="danger-btn" onclick="clearAllTeams()" title="Delete all teams permanently">
+                        <i class="fa-solid fa-users-slash"></i> TEAMS
+                    </button>
+                    <button class="danger-btn" onclick="clearAllQuestions()" title="Delete all questions permanently">
+                        <i class="fa-solid fa-file-circle-xmark"></i> QUESTIONS
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        &copy; <span id="footerYear"></span> TRAIN 303. ALL RIGHTS RESERVED.
+    </footer>
+    <script>document.getElementById('footerYear').innerText = new Date().getFullYear();</script>
+    <script src="js/admin.js"></script>
+    <!-- Violations Modal -->
+    <div id="violationsModal" class="modal" style="display:none;">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-triangle-exclamation"></i> Tab Switch Violations</h2>
+                <button class="close-btn" onclick="closeViolationsModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size: 0.9em; opacity: 0.7; margin-bottom: 20px;">The following teams have switched tabs
+                    or minimized their browser during the quiz.</p>
+                <div id="violationsList" style="max-height: 400px; overflow-y: auto;">
+                    <p style="text-align: center; opacity: 0.5;">Loading violations...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="secondary" onclick="closeViolationsModal()">CLOSE</button>
+                <button class="primary" onclick="loadViolations()">REFRESH</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
