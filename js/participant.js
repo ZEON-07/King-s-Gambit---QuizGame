@@ -1,8 +1,8 @@
 const WORKER_URL = 'https://kings-gambit-worker.mr-adhi125.workers.dev';
 const API = WORKER_URL || '';
 
-const channel = new BroadcastChannel("quizChannel");
-const ping = new BroadcastChannel("ping");
+const channel = createChannel("quizChannel");
+const ping = createChannel("ping");
 
 const body = document.body;
 const qsd = document.getElementsByClassName("quizQ")[0];

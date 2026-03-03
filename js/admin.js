@@ -1,5 +1,5 @@
-const channel = new BroadcastChannel('quizChannel');
-const ping = new BroadcastChannel('ping');
+const channel = createChannel('quizChannel');
+const ping = createChannel('ping');
 
 function elem(id) {
     return document.getElementById(id);

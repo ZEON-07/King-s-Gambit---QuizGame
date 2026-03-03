@@ -1,6 +1,6 @@
 const WORKER_URL = 'https://kings-gambit-worker.mr-adhi125.workers.dev';
 const API = WORKER_URL || '';
-const channel = new BroadcastChannel("quizChannel");
+const channel = createChannel("quizChannel");
 window._currentOptions = [];
 channel.onmessage = function (event) {
     const msg = event.data;
