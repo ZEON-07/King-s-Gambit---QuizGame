@@ -1,0 +1,332 @@
+[
+  {
+    "q": "What is the capital of Canada?",
+    "options": [
+      "Toronto",
+      "Vancouver",
+      "Ottawa",
+      "Montreal"
+    ],
+    "answer": 2,
+    "hint": "It's in Ontario, but it's not the biggest city"
+  },
+  {
+    "q": "Which planet is closest to the Sun?",
+    "options": [
+      "Venus",
+      "Earth",
+      "Mercury",
+      "Mars"
+    ],
+    "answer": 2,
+    "hint": "Named after the Roman messenger god"
+  },
+  {
+    "q": "What is the currency of Japan?",
+    "options": [
+      "Won",
+      "Yuan",
+      "Yen",
+      "Ringgit"
+    ],
+    "answer": 2,
+    "hint": "Its symbol is ¥"
+  },
+  {
+    "q": "Who invented the light bulb?",
+    "options": [
+      "Newton",
+      "Tesla",
+      "Edison",
+      "Bell"
+    ],
+    "answer": 2,
+    "hint": "He had over 1,000 patents"
+  },
+  {
+    "q": "Which is the largest continent?",
+    "options": [
+      "Africa",
+      "Asia",
+      "Europe",
+      "Australia"
+    ],
+    "answer": 1,
+    "hint": "Home to over 4 billion people"
+  },
+  {
+    "q": "What is 12 × 12?",
+    "options": [
+      "124",
+      "144",
+      "134",
+      "154"
+    ],
+    "answer": 1,
+    "hint": "It's a perfect square — also called a gross"
+  },
+  {
+    "q": "Which gas is most abundant in Earth's atmosphere?",
+    "options": [
+      "Oxygen",
+      "Carbon Dioxide",
+      "Nitrogen",
+      "Hydrogen"
+    ],
+    "answer": 2,
+    "hint": "It makes up about 78% of the air"
+  },
+  {
+    "q": "Who painted the Starry Night?",
+    "options": [
+      "Van Gogh",
+      "Picasso",
+      "Da Vinci",
+      "Rembrandt"
+    ],
+    "answer": 0,
+    "hint": "A Dutch painter who cut off his own ear"
+  },
+  {
+    "q": "Which is the longest bone in the human body?",
+    "options": [
+      "Arm",
+      "Femur",
+      "Spine",
+      "Skull"
+    ],
+    "answer": 1,
+    "hint": "It's in your upper leg"
+  },
+  {
+    "q": "Which country is known as the Land of the Rising Sun?",
+    "options": [
+      "China",
+      "Thailand",
+      "Japan",
+      "Korea"
+    ],
+    "answer": 2,
+    "hint": "Its flag is a red circle on white"
+  },
+  {
+    "q": "What is the freezing point of water?",
+    "options": [
+      "0°C",
+      "10°C",
+      "32°C",
+      "-10°C"
+    ],
+    "answer": 0,
+    "hint": "Think of when ice forms"
+  },
+  {
+    "q": "Which is the largest ocean?",
+    "options": [
+      "Atlantic",
+      "Indian",
+      "Pacific",
+      "Arctic"
+    ],
+    "answer": 2,
+    "hint": "Its name means 'peaceful'"
+  },
+  {
+    "q": "What is the square root of 81?",
+    "options": [
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+    "answer": 2,
+    "hint": "Think: what number times itself equals 81?"
+  },
+  {
+    "q": "Which country hosted the Olympics 2016?",
+    "options": [
+      "China",
+      "UK",
+      "Brazil",
+      "Japan"
+    ],
+    "answer": 2,
+    "hint": "The games were held in Rio de Janeiro"
+  },
+  {
+    "q": "Which organ helps in breathing?",
+    "options": [
+      "Heart",
+      "Lungs",
+      "Kidney",
+      "Brain"
+    ],
+    "answer": 1,
+    "hint": "You have two of them in your chest"
+  },
+  {
+    "q": "Which is the national animal of India?",
+    "options": [
+      "Lion",
+      "Tiger",
+      "Elephant",
+      "Leopard"
+    ],
+    "answer": 1,
+    "hint": "A Bengal breed of this animal is famous"
+  },
+  {
+    "q": "Who discovered penicillin?",
+    "options": [
+      "Newton",
+      "Darwin",
+      "Fleming",
+      "Einstein"
+    ],
+    "answer": 2,
+    "hint": "He found it by accident from mold on a petri dish"
+  },
+  {
+    "q": "Which is the largest island?",
+    "options": [
+      "Greenland",
+      "Australia",
+      "Iceland",
+      "Madagascar"
+    ],
+    "answer": 0,
+    "hint": "Ironically, most of it is covered in ice"
+  },
+  {
+    "q": "Which gas is used for breathing by humans?",
+    "options": [
+      "Nitrogen",
+      "Hydrogen",
+      "Oxygen",
+      "Helium"
+    ],
+    "answer": 2,
+    "hint": "Its chemical symbol is O₂"
+  },
+  {
+    "q": "What is 100 ÷ 4?",
+    "options": [
+      "20",
+      "25",
+      "30",
+      "40"
+    ],
+    "answer": 1,
+    "hint": "Think of a quarter of 100"
+  },
+  {
+    "q": "Which is the fastest bird?",
+    "options": [
+      "Eagle",
+      "Falcon",
+      "Crow",
+      "Parrot"
+    ],
+    "answer": 1,
+    "hint": "The Peregrine species can dive at 380 km/h"
+  },
+  {
+    "q": "Which country gifted Statue of Liberty to USA?",
+    "options": [
+      "France",
+      "UK",
+      "Spain",
+      "Italy"
+    ],
+    "answer": 0,
+    "hint": "A European country known for the Eiffel Tower"
+  },
+  {
+    "q": "Which vitamin is good for eyes?",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "answer": 0,
+    "hint": "Carrots are rich in this vitamin"
+  },
+  {
+    "q": "Which is the smallest continent?",
+    "options": [
+      "Europe",
+      "Australia",
+      "Antarctica",
+      "Africa"
+    ],
+    "answer": 1,
+    "hint": "It's also a country on its own"
+  },
+  {
+    "q": "What is the hardest natural substance?",
+    "options": [
+      "Gold",
+      "Iron",
+      "Diamond",
+      "Silver"
+    ],
+    "answer": 2,
+    "hint": "It's made of pure carbon under extreme pressure"
+  },
+  {
+    "q": "Which country is famous for pizza?",
+    "options": [
+      "France",
+      "Italy",
+      "USA",
+      "Spain"
+    ],
+    "answer": 1,
+    "hint": "This country shaped like a boot"
+  },
+  {
+    "q": "Which instrument is used to measure pressure?",
+    "options": [
+      "Thermometer",
+      "Barometer",
+      "Altimeter",
+      "Speedometer"
+    ],
+    "answer": 1,
+    "hint": "The prefix 'baro' relates to weight/pressure"
+  },
+  {
+    "q": "Which is the largest organ in human body?",
+    "options": [
+      "Heart",
+      "Skin",
+      "Liver",
+      "Brain"
+    ],
+    "answer": 1,
+    "hint": "It covers your entire body"
+  },
+  {
+    "q": "Which planet has rings?",
+    "options": [
+      "Earth",
+      "Mars",
+      "Saturn",
+      "Venus"
+    ],
+    "answer": 2,
+    "hint": "The 6th planet from the Sun"
+  },
+  {
+    "q": "What is 5 squared?",
+    "options": [
+      "10",
+      "20",
+      "25",
+      "30"
+    ],
+    "answer": 2,
+    "hint": "5 × 5 = ?"
+  }
+]
